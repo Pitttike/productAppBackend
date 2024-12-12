@@ -8,45 +8,45 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private readonly db: PrismaService) { }
   async create(createUserDto: CreateUserDto) {
+    console.log(createUserDto)
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-
+    
     return await this.db.user.create({
-        data: {
-            userName: createUserDto.userName,
-            password: hashedPassword
-        },
-        select: {
-            id: true,
-            userName: true,
-            cartItems: true,
-            password: false
-        }
+      data: {
+        userName: createUserDto.username,
+        password: hashedPassword
+      },
+      select: {
+        id: true,
+        userName: true,
+        cartItems: true,
+        password: false
+      }
     });
-}
-
+  }
+  
   findAll() {
     return this.db.user.findMany();
   }
-
+  
   async findOneById(id: number) {
     return await this.db.user.findUnique({
       where: {
         id: id
       },
       include: {
-        cartItems: true
+        cartItems: true,
       }
     });
   }
-
+  
   async findOneByName(username: string) {
     return await this.db.user.findUnique({
       where: {
         userName: username
-      }
+      },
     })
   }
-
   async putItemToUserCart(userId: number, productId: number) {
     const product = await this.db.product.findFirst({
       where: {
