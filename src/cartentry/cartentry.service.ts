@@ -6,10 +6,11 @@ import { cartEntryDto } from './dto/createCartEntry.dto';
 export class CartentryService {
     constructor(private readonly db: PrismaService) {}
     
-    async createCartEntry(cartEntryData: cartEntryDto) {
+    async createCartEntry(cartEntryData: cartEntryDto, userId: number) {
         return await this.db.cartEntry.create({
             data: {
-                ...cartEntryData
+                userId: userId,
+                productId: cartEntryData.productId
             }
         })
     }

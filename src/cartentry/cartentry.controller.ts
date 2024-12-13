@@ -15,8 +15,8 @@ export class CartentryController {
 
   @UseGuards(AuthGuard)
   @Post('')
-  createCartEntry(@Body() EntryData: cartEntryDto) {
-    return this.cartentryService.createCartEntry(EntryData);
+  createCartEntry(@Body() EntryData: cartEntryDto, @Request() req) {
+    return this.cartentryService.createCartEntry(EntryData, req.user.id);
   }
 
   @UseGuards(AuthGuard)
