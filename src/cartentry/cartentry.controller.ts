@@ -21,7 +21,7 @@ export class CartentryController {
 
   @UseGuards(AuthGuard)
   @Patch(':productId')
-  updateQuantity(@Request() req, @Param('productId') productId: string, @Body() quantityChange: number) {
+  updateQuantity(@Request() req, @Param('productId') productId: string, @Body('quantityChange') quantityChange: number) {
     return this.cartentryService.updateQuantity(+req.user.id, +productId, +quantityChange)
   }
 
