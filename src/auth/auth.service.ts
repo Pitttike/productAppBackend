@@ -21,18 +21,8 @@ export class AuthService {
 
         const payload = { id: user.id, username: user.userName };
 
-
         return {
             access_token: await this.jwtService.signAsync(payload)
         }
     }
-
-    async findUserFromToken(token: string) {
-        const decoded = this.jwtService.verify(token);
-        
-        const user = await this.userService.findOneById(decoded.id);
-    
-        return user;
-      }
-
 }

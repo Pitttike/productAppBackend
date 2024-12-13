@@ -8,7 +8,6 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private readonly db: PrismaService) { }
   async create(createUserDto: CreateUserDto) {
-    console.log(createUserDto)
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     
     return await this.db.user.create({
@@ -19,23 +18,7 @@ export class UsersService {
       select: {
         id: true,
         userName: true,
-        cartItems: true,
         password: false
-      }
-    });
-  }
-  
-  findAll() {
-    return this.db.user.findMany();
-  }
-  
-  async findOneById(id: number) {
-    return await this.db.user.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        cartItems: true,
       }
     });
   }
@@ -47,48 +30,20 @@ export class UsersService {
       },
     })
   }
-  async putItemToUserCart(userId: number, productId: number) {
-    const product = await this.db.product.findFirst({
-      where: {
-        id: productId
-      }
-    });
-    return await this.db.user.update({
-      where: {
-        id: userId
-      },
-      data: {
-        cartItems: {
-          connect: product
-        }
-      }
 
-    });
-  }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return this.db.user.delete({where: {id: id}});
-  }
-
-  async removeItemFromUserCart(id: number, productId: number) {
-    const product = await this.db.product.findFirst({
-      where: {
-        id: productId
-      }
-    });
+  async update(id: number, updateUserDto: UpdateUserDto) {
     return await this.db.user.update({
       where: {
         id: id
       },
       data: {
-        cartItems: {
-          disconnect: product
-        }
+        ...updateUserDto
       }
     });
+  }
+
+  remove(id: number) {
+    return this.db.user.delete({where: {id: id}});
   }
 }
