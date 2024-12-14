@@ -16,10 +16,12 @@ export class CartentryService {
     }
 
     async getCart(userId: number) {
-        return await this.db.cartEntry.groupBy({
-            by: ['userId'],
+        return await this.db.cartEntry.findMany({
             where: {
                 userId: userId
+            },
+            include: {
+                product:true,
             }
         })
     }
