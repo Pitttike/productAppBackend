@@ -20,8 +20,11 @@ export class CartentryService {
             where: {
                 userId: userId
             },
-            include: {
-                product:true,
+            select: {
+                product: true,
+                quantity: true,
+                productId: false,
+                userId: false
             }
         })
     }
