@@ -16,7 +16,7 @@ export class CartentryController {
   @UseGuards(AuthGuard)
   @Post('')
   createCartEntry(@Body() EntryData: cartEntryDto, @Request() req) {
-    return this.cartentryService.createCartEntry(EntryData, req.user.id);
+    return this.cartentryService.createCartEntry(EntryData, +req.user.id);
   }
 
   @UseGuards(AuthGuard)
@@ -27,8 +27,8 @@ export class CartentryController {
 
   @UseGuards(AuthGuard)
   @Delete('/:id')
-  deleteEntry(@Param('id') productId: string, @Request() req) {
-    return this.cartentryService.deleteEntry(+productId, +req.user.id);
+  deleteEntry(@Request() req, @Param('id') productId: string) {
+    return this.cartentryService.deleteEntry(+req.user.id, +productId);
   }
 
 }

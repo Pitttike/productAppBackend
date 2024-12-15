@@ -1,18 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { cartEntryDto } from './dto/createCartEntry.dto';
 
 @Injectable()
 export class CartentryService {
-    constructor(private readonly db: PrismaService) {}
-    
+    constructor(private readonly db: PrismaService) { }
+
     async createCartEntry(cartEntryData: cartEntryDto, userId: number) {
-        return await this.db.cartEntry.create({
-            data: {
-                userId: userId,
-                productId: cartEntryData.productId
+        try {
+
+            return await this.db.cartEntry.create({
+                data: {
+                    userId: userId,
+                    productId: cartEntryData.productId
+                }
+            })
+         } catch (error: any) {
+            if (error.code === "P2002") {
+                throw new BadRequestException('A termék már a kosárban van', {
+                    cause: new Error(), 
+                    description: 'A mennyiséget csak a kosárban lehet változtatni'
+                })
             }
-        })
+         }
     }
 
     async getCart(userId: number) {
@@ -27,6 +37,7 @@ export class CartentryService {
                 userId: false
             }
         })
+
     }
 
     async updateQuantity(userId: number, productId: number, quantityChange: number) {
