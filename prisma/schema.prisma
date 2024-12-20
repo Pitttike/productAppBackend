@@ -34,7 +34,7 @@ model CartEntry {
   userId    Int
   product   Product @relation(fields: [productId], references: [id])
   productId Int
-  quantity  Int     @default(1)
+  quantity  Int     @default(1)  @db.UnsignedInt
 
   @@unique([userId, productId])
 }

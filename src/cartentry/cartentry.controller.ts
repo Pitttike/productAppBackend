@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, UseGuards, Request, Patch, Param, Delete, 
 import { CartentryService } from './cartentry.service';
 import { cartEntryDto } from './dto/createCartEntry.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { updateCartEntry } from './dto/updateCartEntry.dto';
 
 @Controller('cartentry')
 export class CartentryController {
@@ -22,7 +23,12 @@ export class CartentryController {
   @UseGuards(AuthGuard)
   @Patch(':productId')
   updateQuantity(@Request() req, @Param('productId') productId: string, @Body('quantityChange') quantityChange: number) {
-    return this.cartentryService.updateQuantity(+req.user.id, +productId, +quantityChange)
+    const  updateDto: updateCartEntry = {
+      userId: req.user.id,
+      productId: +productId,
+      quantityChange: quantityChange
+    }
+    return this.cartentryService.updateQuantity(updateDto)
   }
 
   @UseGuards(AuthGuard)

@@ -11,12 +11,12 @@ export class AuthService {
     async signIn(username: string, pass: string): Promise<{ access_token: string }> {
         const user = await this.userService.findOneByName(username);
         if (!user) {
-            throw new UnauthorizedException('Invalid credentials')
+            throw new UnauthorizedException('Érvénytelen adatok!')
         }
         const isPasswordValid = await bcrypt.compare(pass, user.password);
 
         if (!isPasswordValid) {
-            throw new UnauthorizedException('Invalid credentials');
+            throw new UnauthorizedException('Érvénytelen adatok!');
         }
 
         const payload = { id: user.id, username: user.userName };
