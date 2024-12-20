@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class ProductsService {
   constructor(private readonly db : PrismaService) {}
+  
   create(createProductDto: CreateProductDto) {
     return 'This action adds a new product';
   }

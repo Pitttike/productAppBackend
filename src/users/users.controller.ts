@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, Header, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -14,34 +13,16 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOneById(+id);
-  }
-
-  @Put(':id/cartItems/:productId')
-  putItemToUserCart(@Param('id') id: string, @Param('productId') productId : string) {
-    return this.usersService.putItemToUserCart(+id, +productId);
-  }
-
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
 
-  @Delete(':id/cartItems/:productId')
-  removeItemFromUserCart(@Param('id') id: string, @Param('productId') productId: string) {
-    return this.usersService.removeItemFromUserCart(+id, +productId);
-  }
 }
