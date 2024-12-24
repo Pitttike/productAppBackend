@@ -6,6 +6,9 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+  findAll() {
+    return this.db.user.findMany();
+  }
   constructor(private readonly db: PrismaService) { }
   async create(createUserDto: CreateUserDto) {
     if (createUserDto.password == createUserDto.username) {
@@ -20,7 +23,12 @@ export class UsersService {
       return await this.db.user.create({
         data: {
           userName: createUserDto.username,
-          password: hashedPassword
+          password: hashedPassword,
+          roles: {
+            connect: {
+              name: 'User'
+            }
+          }
         },
         select: {
           id: true,
@@ -35,6 +43,7 @@ export class UsersService {
       throw new Error;
     }
   }
+
 
   async findOneByName(username: string) {
     return await this.db.user.findUnique({

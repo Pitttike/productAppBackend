@@ -26,6 +26,13 @@ model User {
   userName      String      @unique
   password      String
   cartEntries   CartEntry[]
+  roles         Role[]      // Notice the change from Roles[] to Role[]
+}
+
+model Role {                // Changed from Roles to Role
+  id            Int         @id @default(autoincrement())
+  name          String      @unique  // Changed from 'role' to 'name' for clarity
+  users         User[]
 }
 
 model CartEntry {

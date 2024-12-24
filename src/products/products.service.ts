@@ -7,7 +7,9 @@ export class ProductsService {
   constructor(private readonly db : PrismaService) {}
   
   create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+    return this.db.product.create({
+      data: createProductDto
+    });
   }
 
   findAll() {
